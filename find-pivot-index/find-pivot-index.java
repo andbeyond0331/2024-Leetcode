@@ -1,20 +1,26 @@
 class Solution {
     public int pivotIndex(int[] nums) {
-        int[] in = new int[nums.length];
-        in[0] = nums[0];
-        int[] de = new int[nums.length];
-        de[nums.length-1] = nums[nums.length-1];
-        for(int i = 1; i < nums.length; i++) {
-            in[i] = in[i-1] + nums[i];
-            de[nums.length-1-i] = de[nums.length-1-i+1] + nums[nums.length-1-i];
+        int[] sums = new int[nums.length];
+        sums[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            sums[i] = nums[i] + sums[i-1];
         }
-        int answer = -1;
-        for(int i = 0; i < nums.length; i++) {
-            if(in[i] == de[i]) {
-                answer = i;
-                break;
+    
+        for (int i = 0;i < nums.length; i++) {
+            if (i==0) {
+                if(sums[nums.length-1] - nums[0] == 0) {
+                    return 0;
+                }
+            } else if (i<=nums.length-1) {
+                if (sums[i-1] == sums[nums.length-1] - sums[i]) {
+                    return i;
+                }
+            } else {
+                if (sums[nums.length-1] == 0) {
+                    return 0;
+                }
             }
         }
-        return answer;
+        return -1;
     }
 }
